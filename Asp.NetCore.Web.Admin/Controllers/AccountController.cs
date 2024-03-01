@@ -1,4 +1,6 @@
 ﻿using Asp.NetCore.Services.Models.Identity;
+using Asp.NetCore.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Asp.NetCore.Web.Admin.Controllers
@@ -15,6 +17,13 @@ namespace Asp.NetCore.Web.Admin.Controllers
         {
             var model = new LoginViewModel { ReturnUrl = "/" };            
             return View(model);
+        }
+
+        [HttpPost("/login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginAsync(LoginViewModel model)
+        {
+            return Redirect(model.ReturnUrl);
         }
     }
 }
