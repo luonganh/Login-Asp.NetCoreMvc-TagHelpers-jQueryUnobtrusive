@@ -9,12 +9,14 @@ namespace Asp.NetCore.Services.Identity
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IdentityContext _context;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public IdentityService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IdentityContext context)
+        public IdentityService(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IdentityContext context, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
+            _signInManager = signInManager;
         }
 
         public async Task<bool> LoginAsync(ModelStateDictionary modelStates, LoginViewModel model)
@@ -41,7 +43,13 @@ namespace Asp.NetCore.Services.Identity
                 case AppUserStatus.Disabled:
                     modelStates.AddModelError(nameof(LoginViewModel.Username), "Account status is invalid: Disabled.");
                     return await Task.FromResult(isValid);
-            }           
+            }
+
+            var loginRes = await _signInManager.PasswordSignInAsync(model?.Username?.Trim() ?? string.Empty, model?.Password?.Trim() ?? string.Empty, true, lockoutOnFailure: true);
+            if (!loginRes.Succeeded)
+            {
+                modelStates.AddModelError(nameof(LoginViewModel.Password), "Password is wrong.");
+            }
 
             if (modelStates.ErrorCount == 0)
             {
