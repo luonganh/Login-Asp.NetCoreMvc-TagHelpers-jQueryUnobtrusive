@@ -1,10 +1,12 @@
-﻿@{    
+﻿@using Asp.NetCore.Services.Models.Identity
+@model LoginViewModel
+@{    
     ViewBag.Title = "Login Page";
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
 @section Styles {
     <style>
-        #password {
+        /* #password {
             width: 100%;
             padding-right: 50px;
         }
@@ -13,6 +15,14 @@
             position: absolute;
             right: 0;
             z-index: 100;
+        } */
+
+        .field-validation-error {
+            color: red
+        }
+
+        .validation-summary-errors {
+            color: red
         }
     </style>
 }
@@ -34,28 +44,27 @@
                     </div>
                     <div class="card-body pt-0">
                         <div class="p-2">
-                            <form class="form-horizontal" method="post" id="frmLogin">
+                            <form class="form-horizontal" method="post" id="frmLogin" action="/login">
                                 <div class="input-group-container">
-                                    <label for="username" class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="username" placeholder="Enter username">
-                                    <span id="usernameError" class="error-notification"></span>
+                                    <label asp-for="Username" class="form-label"></label>
+                                    <input asp-for="Username" class="form-control" placeholder="Enter username" />
+                                    <span asp-validation-for="Username"></span>
                                 </div>
                                 <div class="input-group-container">
-                                    <label class="form-label">Password</label>
+                                    <label asp-for="Password" class="form-label"></label>
                                     <div class="input-group auth-pass-inputgroup">
-                                        <input type="password" class="form-control" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon" id="password" name="password">
+                                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon">
                                         <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
                                     </div>
-                                    <span id="passwordError" class="error-notification"></span>
+                                    <span asp-validation-for="Password"></span>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="remember-check">
-                                    <label class="form-check-label" for="remember-check">
-                                        Remember me
-                                    </label>
-                                </div>                               
+                                    <input asp-for="RememberMe" class="form-check-input" type="checkbox">
+                                    <label asp-for="RememberMe" class="form-check-label"></label>
+                                </div>                 
+                                <input type="hidden" asp-for="ReturnUrl" class="form-control" value="@Model.ReturnUrl" />
                                 <div class="mt-2 d-grid">
-                                    <button class="btn btn-primary waves-effect waves-light" id="btnLogin">Log In</button>
+                                    <button class="btn btn-primary waves-effect waves-light" type="submit" id="btnLogin">Log In</button>
                                 </div>
                             </form>
                         </div>
