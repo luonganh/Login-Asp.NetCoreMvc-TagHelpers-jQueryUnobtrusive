@@ -20,7 +20,13 @@ namespace Asp.NetCore.Web.Admin.Controllers
         [HttpGet("/login")]
         public IActionResult Login()
         {
-            var model = new LoginViewModel { ReturnUrl = "/" };            
+            var model = new LoginViewModel { ReturnUrl = "/" };
+            // Check existence of .AspNetCore.Identity.Application cookie
+            var isAuthenticated = HttpContext.User.Identity.IsAuthenticated;
+            if (isAuthenticated)
+            {
+                return Redirect(model.ReturnUrl);
+            }
             return View(model);
         }
 
