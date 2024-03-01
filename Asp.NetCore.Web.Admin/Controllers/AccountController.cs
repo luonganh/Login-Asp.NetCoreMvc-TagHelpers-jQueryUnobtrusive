@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.NetCore.Services.Models.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Asp.NetCore.Web.Admin.Controllers
 {
@@ -11,8 +12,9 @@ namespace Asp.NetCore.Web.Admin.Controllers
 
         [HttpGet("/login")]
         public IActionResult Login()
-        {            
-            return View();
+        {
+            var model = new LoginViewModel { ReturnUrl = "/" };            
+            return View(model);
         }
     }
 }
