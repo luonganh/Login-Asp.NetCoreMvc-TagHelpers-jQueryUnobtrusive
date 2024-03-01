@@ -23,6 +23,10 @@ namespace Asp.NetCore.Web.Admin.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> LoginAsync(LoginViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             return Redirect(model.ReturnUrl);
         }
     }
