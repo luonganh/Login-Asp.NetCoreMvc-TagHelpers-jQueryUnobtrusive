@@ -1,12 +1,17 @@
-﻿using Asp.NetCore.Services.Models.Identity;
-using Asp.NetCore.Shared.Models;
+﻿using Asp.NetCore.Services.Identity;
+using Asp.NetCore.Services.Models.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Asp.NetCore.Web.Admin.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IIdentityService _identityService;
+        public AccountController(IIdentityService identityService)
+        {
+            _identityService = identityService;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -24,6 +29,10 @@ namespace Asp.NetCore.Web.Admin.Controllers
         public async Task<IActionResult> LoginAsync(LoginViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            if (await _identityService.LoginAsync(ModelState, model) == false)
             {
                 return View(model);
             }
