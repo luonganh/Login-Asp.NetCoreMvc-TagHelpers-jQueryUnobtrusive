@@ -10,7 +10,7 @@ namespace Asp.NetCore.Services.Models.Identity
         [Range(4, 50)]
         [NoWhiteSpaces]
         [StartWithLetter]
-        [EnglishChars]
+        [EnglishCharsUnderscores]
         public string? Username { get; set; }
 
         [Required(ErrorMessage = "Please enter the password")]
